@@ -2,15 +2,15 @@ using UnityEngine;
 using TMPro;
 public class FpsUI : MonoBehaviour {
     public TextMeshProUGUI fpsCounterText;
-    float fpsCounter;
-    float refreshTime = 0.5f;
+    [SerializeField] private float fpsRefreshRate = 0.5f; // defines how often fps will be updated on HUD ;
+    private float fpsCounter;
+    private float timer;
+ 
     void Update() {
-        fpsCounter = (int)(1f / Time.unscaledDeltaTime);
-        if (Time.time > refreshTime) {
-            fpsCounterText.text = fpsCounter.ToString();
-            refreshTime += 0.5f;
+        if (Time.time > timer) {
+            fpsCounter = (int) (1f / Time.unscaledDeltaTime);
+            fpsCounterText.text = fpsCounter.ToString() + " FPS";
+            timer += fpsRefreshRate;
         }
-        
-        
     }
 }
