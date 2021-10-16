@@ -1952,7 +1952,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 144
+  m_text: 144 FPS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2388,7 +2388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddeaeffe06d8ff842acfd08df3bc544f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fpsCounterText: {fileID: 0}
+  _fpsCounterText: {fileID: 1131756288}
+  _fpsRefreshRate: 1
 --- !u!1001 &1572182841
 PrefabInstance:
   m_ObjectHideFlags: 0
