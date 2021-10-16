@@ -7,4 +7,5 @@ public enum CubeTypes {
 
 public class CubeType : MonoBehaviour {
     public CubeTypes type;
+
 }
