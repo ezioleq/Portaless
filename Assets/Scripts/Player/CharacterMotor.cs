@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterMotor : MonoBehaviour {
 	private CharacterController cc;
 	private Vector3 moveDirection = Vector3.zero;
+	private Vector3 playerVelocity = Vector3.zero;
 	private float moveSpeed;
 	private float gravityForce = 16;
 	[SerializeField] private bool noclip;
@@ -15,7 +16,12 @@ public class CharacterMotor : MonoBehaviour {
 	public float walkSpeed = 4f;
 	public float runSpeed = 6.5f;
 	public float midairSpeed = 3;
+	float maxSpeed = 0;
+	public float maxAirSpeed = 3;
+	public float maxGroundSpeed = 30;
+	public float drag = 0;
 	public float jumpForce = 5;
+	float adhesionForce = 0.4f;
 	public bool lockKeyboard;
 
 	private void Start() {
@@ -27,9 +33,20 @@ public class CharacterMotor : MonoBehaviour {
 			Keyboard();
 		if (Input.GetKeyDown(KeyCode.V))
 			noclip = !noclip;
+		cc.Move(playerVelocity * Time.deltaTime);
+	}
+	private void FixedUpdate(){
+		maxSpeed = cc.isGrounded ? maxGroundSpeed : maxAirSpeed; //maxSpeed differs on the ground and in the air
+		if(cc.isGrounded){
+			playerVelocity = GroundAccelerate(playerVelocity, moveDirection, moveSpeed); //on the ground use GroundAccelerate (friction)
+		}else{
+			playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed); //in the air use AirAccelerate (no friction)
+			playerVelocity.y -= gravityForce * Time.deltaTime; //apply gravity 
+		}
 	}
 
 	public void Keyboard() {
+		moveDirection = (Input.GetAxisRaw(horizontalAxis) * transform.right + Input.GetAxisRaw(verticalAxis) * transform.forward).normalized; //calculate moveDirection 
 		moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
 
 		if (Input.GetKey(KeyCode.F2)) {
@@ -41,20 +58,12 @@ public class CharacterMotor : MonoBehaviour {
 		if (!noclip) {
 			GetComponent<CharacterController>().enabled = true;
 			if (cc.isGrounded) {
-				moveDirection = new Vector3(Input.GetAxis(horizontalAxis), 0, Input.GetAxis(verticalAxis));
-				moveDirection = Vector3.ClampMagnitude(moveDirection, 1);
-				moveDirection = transform.TransformDirection(moveDirection);
-				moveDirection *= moveSpeed;
-				if (Input.GetButton("Jump"))
-					moveDirection.y = jumpForce;
-			} else {
-				moveDirection.x = Input.GetAxis(horizontalAxis) * midairSpeed;
-				moveDirection.z = Input.GetAxis(verticalAxis) * midairSpeed;
-				moveDirection = transform.TransformDirection(moveDirection);
-			}
-
-			moveDirection.y -= gravityForce * Time.deltaTime;
-			cc.Move(moveDirection * Time.deltaTime);
+				if (Input.GetButton("Jump")){
+					playerVelocity.y = Mathf.Clamp(playerVelocity.y, 0, Mathf.Infinity);
+					playerVelocity.y += jumpForce;
+				}		
+			} 
+			
 		} else {
 			GetComponent<CharacterController>().enabled = false;
 			transform.Translate(0, 0, Input.GetAxis(verticalAxis) * moveSpeed * Time.deltaTime, Space.Self);
@@ -66,5 +75,29 @@ public class CharacterMotor : MonoBehaviour {
 			if (Input.GetKey(KeyCode.LeftControl))
 				transform.Translate(0, -moveSpeed * Time.deltaTime, 0, Space.World);
 		}
+	}
+	private Vector3 Accelerate(Vector3 currentVelocity, Vector3 direction, float acceleration){
+		float currentSpeed = Vector3.Dot(new Vector3(currentVelocity.x, 0, currentVelocity.z), direction); //calculate dot product of velocity and move direction 
+        	float addSpeed = acceleration * Time.fixedDeltaTime; //calculate acceleration
+		if(currentSpeed + addSpeed > maxSpeed) addSpeed = Mathf.Clamp(maxSpeed - currentSpeed, 0, maxSpeed); //don't accelerate if current speed is equal or exceeds max speed
+		return new Vector3(currentVelocity.x, playerVelocity.y, currentVelocity.z) + addSpeed * direction; // return velocity + acceleration 
+	}
+	private Vector3 GroundAccelerate(Vector3 currentVelocity, Vector3 direction, float acceleration){
+        	currentVelocity = ApplyFriction(currentVelocity, drag); 
+        	return Accelerate(currentVelocity, direction, acceleration);
+    	}	
+    	private Vector3 AirAccelerate(Vector3 currentVelocity, Vector3 direction, float acceleration){
+        	return Accelerate(currentVelocity, direction, acceleration);
+    	}
+
+
+	private Vector3 ApplyFriction(Vector3 currentVelocity, float friction){
+        	return currentVelocity * (1 / (friction + 1)); 
+    	}
+	private void OnControllerColliderHit(ControllerColliderHit collision){
+		float momentum = Vector3.Dot(playerVelocity, collision.normal); //calculate velocity product in direction of collision normal
+		if(momentum < 0) playerVelocity -= collision.normal * momentum; //subtract it from velocity (only if calculated momentum points against the normal)
+		if(collision.normal.y > 0)playerVelocity -= collision.normal * adhesionForce; //apply additional adhesion force (required for cc to detect collisions properly)
+
 	}
 }
