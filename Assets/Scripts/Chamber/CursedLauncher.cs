@@ -23,15 +23,13 @@ public class CursedLauncher : MonoBehaviour {
 		if (_launched) {
 			pad.localRotation = Quaternion.Slerp(pad.localRotation, Quaternion.Euler(launchedRot), animationSpeed * Time.deltaTime);
 			_letHimFly = true;
-			_player.GetComponent<CharacterController>().enabled = false;
+			
 		} else {
 			pad.localRotation = Quaternion.Slerp(pad.localRotation, Quaternion.Euler(Vector3.zero), animationSpeed * Time.deltaTime);
 		}
 
-		if (_letHimFly) {
-			_player.transform.position = Vector3.Lerp(_player.transform.position, hitPoint.position, flySpeed * Time.deltaTime);
-		}
-	}
+
+	}	
 
 	IEnumerator IEHide() {
 		yield return new WaitForSeconds(timeToHide);
@@ -41,6 +39,7 @@ public class CursedLauncher : MonoBehaviour {
 	private void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player"))
 			_launched = true;
+			_player.GetComponent<CharacterMotor>().AddMomentum((transform.forward + transform.up) * flySpeed);
 	}
 
 	private void OnTriggerExit(Collider other) {

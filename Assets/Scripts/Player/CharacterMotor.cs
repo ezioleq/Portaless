@@ -100,4 +100,7 @@ public class CharacterMotor : MonoBehaviour {
 		if(collision.normal.y > 0)playerVelocity -= collision.normal * adhesionForce; //apply additional adhesion force (required for cc to detect collisions properly)
 
 	}
+	public void AddMomentum(Vector3 momentum){
+		playerVelocity += momentum;
+	}
 }
