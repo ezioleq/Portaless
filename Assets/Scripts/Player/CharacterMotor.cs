@@ -23,9 +23,12 @@ public class CharacterMotor : MonoBehaviour {
 	public float jumpForce = 5;
 	float adhesionForce = 0.4f;
 	public bool lockKeyboard;
-
+	float groundTimer;
+	private int layerMask;
 	private void Start() {
 		cc = gameObject.GetComponent<CharacterController>();
+		layerMask = LayerMask.GetMask("Player");
+		layerMask = ~layerMask;
 	}
 
 	private void Update() {
@@ -37,8 +40,13 @@ public class CharacterMotor : MonoBehaviour {
 	}
 	private void FixedUpdate(){
 		maxSpeed = cc.isGrounded ? maxGroundSpeed : maxAirSpeed; //maxSpeed differs on the ground and in the air
-		if(cc.isGrounded){
-			playerVelocity = GroundAccelerate(playerVelocity, moveDirection, moveSpeed); //on the ground use GroundAccelerate (friction)
+		if(cc.isGrounded) groundTimer += Time.fixedDeltaTime; //delay ground detection to allow bhopping
+		else groundTimer = 0;
+		if(groundTimer > 0.08f){
+			if(!Input.GetMouseButton(0))playerVelocity = GroundAccelerate(playerVelocity, moveDirection, moveSpeed); //on the ground use GroundAccelerate (friction)
+			if(Input.GetMouseButton(0)){playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed);
+playerVelocity.y -= gravityForce * Time.deltaTime;
+			}
 		}else{
 			playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed); //in the air use AirAccelerate (no friction)
 			playerVelocity.y -= gravityForce * Time.deltaTime; //apply gravity 
@@ -95,10 +103,13 @@ public class CharacterMotor : MonoBehaviour {
         	return currentVelocity * (1 / (friction + 1)); 
     	}
 	private void OnControllerColliderHit(ControllerColliderHit collision){
+	RaycastHit stepCast;
+	float stepCastDepth = 0.1f;
+	if(!Physics.Raycast(transform.position - (cc.height/2) * transform.up + cc.stepOffset * transform.up, new Vector3(playerVelocity.x, 0, playerVelocity.z).normalized, out stepCast, cc.radius/2+stepCastDepth, layerMask, QueryTriggerInteraction.Ignore)){ //check if player is able to step
 		float momentum = Vector3.Dot(playerVelocity, collision.normal); //calculate velocity product in direction of collision normal
 		if(momentum < 0) playerVelocity -= collision.normal * momentum; //subtract it from velocity (only if calculated momentum points against the normal)
 		if(collision.normal.y > 0)playerVelocity -= collision.normal * adhesionForce; //apply additional adhesion force (required for cc to detect collisions properly)
-
+	}
 	}
 	public void AddMomentum(Vector3 momentum){
 		playerVelocity += momentum;
