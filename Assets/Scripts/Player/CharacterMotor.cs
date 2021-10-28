@@ -17,8 +17,10 @@ public class CharacterMotor : MonoBehaviour {
 	public float runSpeed = 6.5f;
 	public float midairSpeed = 3;
 	float maxSpeed = 0;
+	float groundSpeed = 0;
 	public float maxAirSpeed = 3;
-	public float maxGroundSpeed = 30;
+	public float maxWalkSpeed = 20;
+	public float maxRunSpeed = 30;
 	public float drag = 0;
 	public float jumpForce = 5;
 	float adhesionForce = 0.4f;
@@ -39,13 +41,14 @@ public class CharacterMotor : MonoBehaviour {
 		cc.Move(playerVelocity * Time.deltaTime);
 	}
 	private void FixedUpdate(){
-		maxSpeed = cc.isGrounded ? maxGroundSpeed : maxAirSpeed; //maxSpeed differs on the ground and in the air
+		groundSpeed = Input.GetKey(KeyCode.LeftShift) ? maxWalkSpeed : maxRunSpeed;
+		maxSpeed = cc.isGrounded ? groundSpeed : maxAirSpeed; //maxSpeed differs on the ground and in the air
 		if(cc.isGrounded) groundTimer += Time.fixedDeltaTime; //delay ground detection to allow bhopping
 		else groundTimer = 0;
 		if(groundTimer > 0.08f){
 			if(!Input.GetMouseButton(0))playerVelocity = GroundAccelerate(playerVelocity, moveDirection, moveSpeed); //on the ground use GroundAccelerate (friction)
 			if(Input.GetMouseButton(0)){playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed);
-playerVelocity.y -= gravityForce * Time.deltaTime;
+			playerVelocity.y -= gravityForce * Time.deltaTime;
 			}
 		}else{
 			playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed); //in the air use AirAccelerate (no friction)

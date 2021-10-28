@@ -27,8 +27,6 @@ public class CursedLauncher : MonoBehaviour {
 		} else {
 			pad.localRotation = Quaternion.Slerp(pad.localRotation, Quaternion.Euler(Vector3.zero), animationSpeed * Time.deltaTime);
 		}
-
-
 	}	
 
 	IEnumerator IEHide() {
@@ -37,9 +35,10 @@ public class CursedLauncher : MonoBehaviour {
 	}
 
 	private void OnTriggerEnter(Collider other) {
-		if (other.CompareTag("Player"))
+		if (other.CompareTag("Player")){
 			_launched = true;
 			_player.GetComponent<CharacterMotor>().AddMomentum((transform.forward + transform.up) * flySpeed);
+		}
 	}
 
 	private void OnTriggerExit(Collider other) {
