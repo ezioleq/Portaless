@@ -3234,7 +3234,7 @@ MonoBehaviour:
   launchedRot: {x: 60, y: 0, z: 0}
   animationSpeed: 14
   timeToHide: 2
-  flySpeed: 0.2
+  flySpeed: 20
   _launched: 0
   _letHimFly: 0
   _player: {fileID: 0}
@@ -3446,6 +3446,46 @@ PrefabInstance:
     - target: {fileID: 4930947828918908566, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908566, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: m_SlopeLimit
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908566, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: m_StepOffset
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: drag
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: maxSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: runSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: walkSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: maxRunSpeed
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: midairSpeed
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: maxWalkSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
+      propertyPath: maxGroundSpeed
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4930947828918908568, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: m_Name
