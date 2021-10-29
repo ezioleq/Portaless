@@ -37,11 +37,12 @@ public class CharacterMotor : MonoBehaviour {
 	private void Update() {
 		if (!lockKeyboard)
 			Keyboard();
+		
+		if (!noclip)
+			cc.Move(playerVelocity * Time.deltaTime);
 
 		if (Input.GetKeyDown(KeyCode.V))
 			noclip = !noclip;
-
-		cc.Move(playerVelocity * Time.deltaTime);
 	}
 
 	private void FixedUpdate() {
