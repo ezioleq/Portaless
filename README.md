@@ -5,6 +5,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/Ezioleq/Portaless)
 ![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Ezioleq/Portaless/1)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Ezioleq/Portaless)
+![GitHub forks](https://img.shields.io/github/forks/Ezioleq/Portaless)
 
 ## About
 Portaless is a simple fangame made in Unity Engine for fun and experience.

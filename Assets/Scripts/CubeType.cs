@@ -1,10 +1,10 @@
 using UnityEngine;
 
 public enum CubeTypes {
-    Normal,
-    Reflective
+	Normal,
+	Reflective
 }
 
 public class CubeType : MonoBehaviour {
-    public CubeTypes type;
+	public CubeTypes type;
 }
