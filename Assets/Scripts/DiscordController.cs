@@ -1,39 +1,80 @@
-using System;
-using UnityEngine;
 using Discord;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DiscordController : MonoBehaviour {
-	public Discord.Discord discord;
+	private static DiscordController _instance;
+	public static DiscordController Instance { get { return _instance; } }
 
-	void Awake() {
-		DontDestroyOnLoad(this);
-		if (FindObjectsOfType(GetType()).Length > 1)
-			Destroy(this);
+	[SerializeField] private long _clientId;
+	[SerializeField] private string _largeImage;
+	[SerializeField] private string _largeText;
+	[SerializeField] private string[] _randomStates;
 
-		discord = new Discord.Discord(855876148675346442, (UInt64)Discord.CreateFlags.Default);
-		var activityManager = discord.GetActivityManager();
-		var activity = new Activity {
-			State = "Doing tests",
-			Details = "Chamber 01",
-			Assets = new ActivityAssets {
-				LargeImage = "icon",
-				LargeText = "I'm drowning, help"
-			},
-			Timestamps = new ActivityTimestamps {
-				Start = DateTimeOffset.Now.ToUnixTimeSeconds()
-			}
+	private Discord.Discord _discord;
+	private Discord.ActivityManager _activityManager;
+	private ActivityTimestamps _activityTimestamp;
+
+	private ActivityAssets _activityAsset;
+
+	private void Awake() {
+		// Singleton
+		if (_instance != null && _instance != this)
+			Destroy(this.gameObject);
+		else
+			_instance = this;
+
+		// Create new Discord instance
+		_discord = new Discord.Discord(_clientId, (System.UInt64)Discord.CreateFlags.NoRequireDiscord);
+		_activityManager = _discord.GetActivityManager();
+
+		// Set default activity assets (this big picture on Discord's RPC)
+		_activityAsset = new ActivityAssets {
+			LargeImage = _largeImage,
+			LargeText = _largeText
 		};
-		activityManager.UpdateActivity(activity, (res) => {
+
+		// Set start timestamp
+		_activityTimestamp = new ActivityTimestamps {
+			Start = System.DateTimeOffset.Now.ToUnixTimeSeconds()
+		};
+
+		// First activity
+		var activity = new Activity {
+			Assets = _activityAsset,
+			Timestamps = _activityTimestamp
+		};
+
+		// Set first activity
+		_activityManager.UpdateActivity(activity, (res) => {
 			if (res == Discord.Result.Ok)
-				Debug.Log("Discord RPC OK");
+				Debug.Log("Initialized Discord RPC");
+		});
+
+		// Listen to current scene changes
+		SceneManager.activeSceneChanged += OnSceneChange;
+	}
+
+	private void Update() {
+		_discord.RunCallbacks();
+	}
+
+	private void OnSceneChange(Scene current, Scene next) {
+		var activity = new Activity {
+			Details = next.name,
+			// Get random state, just for variety
+			State = _randomStates[Random.Range(0, _randomStates.Length-1)],
+			Assets = _activityAsset,
+			Timestamps = _activityTimestamp
+		};
+
+		_activityManager.UpdateActivity(activity, (res) => {
+			if (res == Discord.Result.Ok)
+				Debug.Log("Scene changed, RPC Updated");
 		});
 	}
 
-	void Update() {
-		discord.RunCallbacks();
-	}
-
 	private void OnApplicationQuit() {
-		discord.Dispose();
+		_discord.Dispose();
 	}
 }
