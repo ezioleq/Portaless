@@ -3429,11 +3429,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: maxRunSpeed
-      value: 25
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: midairSpeed
-      value: 60
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: maxWalkSpeed
