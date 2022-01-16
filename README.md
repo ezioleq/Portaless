@@ -19,7 +19,7 @@ and we are here now.
 I'd like to treat it like a prototype, sandbox, something where we can experiment with new entities,
 learn code, project scaling and maintenance. 
 
-Please use `Unity 2020.3.11f1` for best compatibility.
+Please use `Unity 2020.3.26f1` for best compatibility.
 
 See [Portal 2 on Steam](https://store.steampowered.com/app/620/Portal_2/)
 
