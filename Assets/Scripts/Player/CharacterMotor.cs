@@ -87,7 +87,7 @@ public class CharacterMotor : MonoBehaviour {
 				if (Input.GetButton("Jump")) {
 					playerVelocity.y = Mathf.Clamp(playerVelocity.y, 0, Mathf.Infinity);
 					playerVelocity.y += jumpForce;
-				}		
+				}
 			} 
 			
 		} else {
@@ -107,7 +107,7 @@ public class CharacterMotor : MonoBehaviour {
 		// calculate dot product of velocity and move direction 
 		float currentSpeed = Vector3.Dot(new Vector3(currentVelocity.x, 0, currentVelocity.z), direction);
 		// calculate acceleration
-        float addSpeed = acceleration * Time.fixedDeltaTime;
+		float addSpeed = acceleration * Time.fixedDeltaTime;
 
 		if(currentSpeed + addSpeed > maxSpeed)
 			// don't accelerate if current speed is equal or exceeds max speed
@@ -118,17 +118,17 @@ public class CharacterMotor : MonoBehaviour {
 	}
 
 	private Vector3 GroundAccelerate(Vector3 currentVelocity, Vector3 direction, float acceleration) {
-       	currentVelocity = ApplyFriction(currentVelocity, drag); 
-       	return Accelerate(currentVelocity, direction, acceleration);
-    }	
-    
+		currentVelocity = ApplyFriction(currentVelocity, drag); 
+		return Accelerate(currentVelocity, direction, acceleration);
+	}
+	
 	private Vector3 AirAccelerate(Vector3 currentVelocity, Vector3 direction, float acceleration) {
-       	return Accelerate(currentVelocity, direction, acceleration);
-    }
+		return Accelerate(currentVelocity, direction, acceleration);
+	}
 
 	private Vector3 ApplyFriction(Vector3 currentVelocity, float friction) {
-       	return currentVelocity * (1 / (friction + 1)); 
-    }
+		return currentVelocity * (1 / (friction + 1)); 
+	}
 
 	private void OnControllerColliderHit(ControllerColliderHit collision) {
 		RaycastHit stepCast;
