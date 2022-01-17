@@ -6,9 +6,6 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
-.vscode/
-GIMP/
-
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
@@ -68,3 +65,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Ignore TextMesh Pro imported files
+/[Aa]ssets/[Tt]ext[Mm]esh\ [Pp]ro.meta
+/[Aa]ssets/[Tt]ext[Mm]esh\ [Pp]ro/*
