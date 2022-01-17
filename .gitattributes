@@ -8,7 +8,7 @@
 * text=auto
 
 # Code
-*.cs text diff=csharp
+*.cs text eol=lf diff=csharp
 
 # Unity Text Assets
 *.meta unityyaml
