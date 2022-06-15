@@ -2,51 +2,55 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class CubeButton : MonoBehaviour {
-	public bool activated;
-	public float animationSpeed = 5f;
-	public UnityEvent onEnter = new UnityEvent();
-	public UnityEvent onExit = new UnityEvent();
-	private GameObject _activator;
-	private Vector3 _offset = new Vector3(0, -0.12f, 0);
+	[SerializeField] private bool activated;
+	[SerializeField] private float animationSpeed = 5f;
+	[SerializeField] private Vector3 offset = new Vector3(0, -0.12f, 0);
+
+	[SerializeField] private UnityEvent onEnter = new UnityEvent();
+	[SerializeField] private UnityEvent onExit = new UnityEvent();
+
+	private GameObject activator;
 	private Transform button;
-	
-	private Color prevColor;
+
+	private Color previousColor;
+
+	[SerializeField]
 	[ColorUsage(true, true)]
-	public Color activatedColor;
+	private Color activatedColor;
 
 	void Start() {
 		button = transform.Find("Button");
 	}
 
 	void Update() {
-		if (activated) {
-			button.localPosition = Vector3.Lerp(button.localPosition, _offset, animationSpeed * Time.deltaTime);
-		} else {
-			button.localPosition = Vector3.Lerp(button.localPosition, Vector3.zero, animationSpeed * Time.deltaTime);
-		}
+		button.localPosition = Vector3.Lerp(
+			button.localPosition,
+			(activated) ? offset : Vector3.zero,
+			animationSpeed * Time.deltaTime
+		);
 	}
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.GetComponent<CubeType>()) {
-			_activator = other.gameObject;
+			activator = other.gameObject;
 			onEnter.Invoke();
 
-			if (other.GetComponent<CubeType>().type == CubeTypes.Normal) {
-				prevColor = other.transform.GetChild(3).GetComponent<Renderer>().materials[1].GetColor("_EmissionColor");
+			if (other.GetComponent<CubeType>().Type == CubeTypes.Normal) {
+				previousColor = other.transform.GetChild(3).GetComponent<Renderer>().materials[1].GetColor("_EmissionColor");
 				other.transform.GetChild(3).GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", activatedColor);
 			}
-			
+
 			activated = true;
 		}
 	}
 
 	private void OnTriggerExit(Collider other) {
-		if (other.gameObject == _activator) {
-			_activator = null;
+		if (other.gameObject == activator) {
+			activator = null;
 			onExit.Invoke();
-			
-			if (other.GetComponent<CubeType>().type == CubeTypes.Normal) {
-				other.transform.GetChild(3).GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", prevColor);
+
+			if (other.GetComponent<CubeType>().Type == CubeTypes.Normal) {
+				other.transform.GetChild(3).GetComponent<Renderer>().materials[1].SetColor("_EmissionColor", previousColor);
 			}
 
 			activated = false;

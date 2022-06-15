@@ -1,36 +1,43 @@
 using UnityEngine;
 
 public class Doors : MonoBehaviour {
-	public bool activated;
-	[ColorUsage(false, true)] public Color activatedColor;
-	[ColorUsage(false, true)] public Color deactivatedColor;
-	public Vector3 openOffset = new Vector3(1, 0, 0);
-	public Vector3 closedOffset = new Vector3(0, -0.3724104f, 0);
-	public float animationSpeed = 10f;
+	[SerializeField] private bool activated;
 
-	private Transform _leftDoor;
-	private Transform _rightDoor;
-	private Material _identifier_mat;
+	[SerializeField]
+	[ColorUsage(false, true)]
+	private Color activatedColor;
+
+	[SerializeField]
+	[ColorUsage(false, true)]
+	private Color deactivatedColor;
+
+	[SerializeField] private Vector3 openOffset = new Vector3(1, 0, 0);
+	[SerializeField] private Vector3 closedOffset = new Vector3(0, -0.3724104f, 0);
+	[SerializeField] private float animationSpeed = 10f;
+
+	private Transform leftDoor;
+	private Transform rightDoor;
+	private Material identifierMaterial;
 
 	void Start() {
-		_leftDoor = transform.GetChild(1);
-		_rightDoor = transform.GetChild(2);
-		_identifier_mat = _rightDoor.GetChild(0).GetComponent<Renderer>().materials[1];
+		leftDoor = transform.GetChild(1);
+		rightDoor = transform.GetChild(2);
+		identifierMaterial = rightDoor.GetChild(0).GetComponent<Renderer>().materials[1];
 	}
 
 	void Update() {
 		if (activated) {
-			_leftDoor.localPosition = Vector3.Lerp(_leftDoor.localPosition, openOffset, animationSpeed * Time.deltaTime);
-			_rightDoor.localPosition = Vector3.Lerp(
-				_rightDoor.localPosition,
+			leftDoor.localPosition = Vector3.Lerp(leftDoor.localPosition, openOffset, animationSpeed * Time.deltaTime);
+			rightDoor.localPosition = Vector3.Lerp(
+				rightDoor.localPosition,
 				new Vector3(openOffset.x * -1, openOffset.y, openOffset.z),
 				animationSpeed * Time.deltaTime
 			);
-			_identifier_mat.SetColor("_EmissionColor", activatedColor);
+			identifierMaterial.SetColor("_EmissionColor", activatedColor);
 		} else {
-			_leftDoor.localPosition = Vector3.Lerp(_leftDoor.localPosition, closedOffset, animationSpeed * Time.deltaTime);
-			_rightDoor.localPosition = Vector3.Lerp(_rightDoor.localPosition, closedOffset, animationSpeed * Time.deltaTime);
-			_identifier_mat.SetColor("_EmissionColor", deactivatedColor);
+			leftDoor.localPosition = Vector3.Lerp(leftDoor.localPosition, closedOffset, animationSpeed * Time.deltaTime);
+			rightDoor.localPosition = Vector3.Lerp(rightDoor.localPosition, closedOffset, animationSpeed * Time.deltaTime);
+			identifierMaterial.SetColor("_EmissionColor", deactivatedColor);
 		}
 	}
 

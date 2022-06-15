@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4930947828918908567}
   - component: {fileID: 4930947828918908564}
   - component: {fileID: 4930947828918908563}
-  - component: {fileID: 4930947828918908562}
   - component: {fileID: 4930947828918908561}
   m_Layer: 3
   m_Name: Player
@@ -73,6 +72,10 @@ MonoBehaviour:
   walkSpeed: 6
   runSpeed: 8
   midairSpeed: 5
+  maxAirSpeed: 3
+  maxWalkSpeed: 20
+  maxRunSpeed: 30
+  drag: 0
   jumpForce: 6
   lockKeyboard: 0
 --- !u!114 &4930947828918908564
@@ -90,13 +93,13 @@ MonoBehaviour:
   mouseYAxis: Mouse Y
   mouseXAxis: Mouse X
   mouseYRotation: 0
-  mouseSensitivity: 4.5
+  MouseSensitivity: 4.5
   maxYRotation: 90
   minYRotation: -90
   zoomingFOV: 30
   zoomSpeed: 10
-  lockMouse: 0
-  showMouse: 0
+  LockMouse: 0
+  ShowMouse: 0
 --- !u!114 &4930947828918908563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,20 +122,6 @@ MonoBehaviour:
   rotationSpeed: 10
   minLocalHeight: -0.4
   _grabbedObject: {fileID: 0}
---- !u!114 &4930947828918908562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4930947828918908568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2e1526d776e5573ba748d0904e6c679, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shotKey: 283
-  superSize: 4
 --- !u!114 &4930947828918908561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,12 +134,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6aeb2ac61ccd533eb796f4111af4c90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  health: 100
   regenRate: 20
   minTimeAfterHit: 2
   emergencySuicideKey: 114
   timeToRespawn: 2.5
-  health: 100
   hurtSprite: {fileID: 0}
 --- !u!1 &4930947829104742656
 GameObject:
@@ -289,6 +277,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2

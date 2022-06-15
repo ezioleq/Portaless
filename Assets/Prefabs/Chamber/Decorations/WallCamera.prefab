@@ -130,9 +130,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e059b09718e541adcb8b456ac7f83cba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rotationSpeed: 3
-  _rotationOffsets: {x: 90, y: 0, z: 0}
-  _headBone: {fileID: 7202428558757752755}
+  rotationSpeed: 6
+  rotationOffsets: {x: 90, y: 0, z: 0}
+  headBone: {fileID: 7202428558757752755}
 --- !u!1 &2070504828303048707
 GameObject:
   m_ObjectHideFlags: 0

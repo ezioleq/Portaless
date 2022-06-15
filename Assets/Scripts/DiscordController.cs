@@ -3,50 +3,50 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DiscordController : MonoBehaviour {
-	private static DiscordController _instance;
-	public static DiscordController Instance { get { return _instance; } }
+	private static DiscordController instance;
+	public static DiscordController Instance { get { return instance; } }
 
-	[SerializeField] private long _clientId;
-	[SerializeField] private string _largeImage;
-	[SerializeField] private string _largeText;
-	[SerializeField] private string[] _randomStates;
+	[SerializeField] private long clientId;
+	[SerializeField] private string largeImage;
+	[SerializeField] private string largeText;
+	[SerializeField] private string[] randomStates;
 
-	private Discord.Discord _discord;
-	private Discord.ActivityManager _activityManager;
-	private ActivityTimestamps _activityTimestamp;
+	private Discord.Discord discord;
+	private Discord.ActivityManager activityManager;
+	private ActivityTimestamps activityTimestamp;
 
-	private ActivityAssets _activityAsset;
+	private ActivityAssets activityAsset;
 
 	private void Awake() {
 		// Singleton
-		if (_instance != null && _instance != this)
+		if (instance != null && instance != this)
 			Destroy(this.gameObject);
 		else
-			_instance = this;
+			instance = this;
 
 		// Create new Discord instance
-		_discord = new Discord.Discord(_clientId, (System.UInt64)Discord.CreateFlags.NoRequireDiscord);
-		_activityManager = _discord.GetActivityManager();
+		discord = new Discord.Discord(clientId, (System.UInt64)Discord.CreateFlags.NoRequireDiscord);
+		activityManager = discord.GetActivityManager();
 
 		// Set default activity assets (this big picture on Discord's RPC)
-		_activityAsset = new ActivityAssets {
-			LargeImage = _largeImage,
-			LargeText = _largeText
+		activityAsset = new ActivityAssets {
+			LargeImage = largeImage,
+			LargeText = largeText
 		};
 
 		// Set start timestamp
-		_activityTimestamp = new ActivityTimestamps {
+		activityTimestamp = new ActivityTimestamps {
 			Start = System.DateTimeOffset.Now.ToUnixTimeSeconds()
 		};
 
 		// First activity
 		var activity = new Activity {
-			Assets = _activityAsset,
-			Timestamps = _activityTimestamp
+			Assets = activityAsset,
+			Timestamps = activityTimestamp
 		};
 
 		// Set first activity
-		_activityManager.UpdateActivity(activity, (res) => {
+		activityManager.UpdateActivity(activity, (res) => {
 			if (res == Discord.Result.Ok)
 				Debug.Log("Initialized Discord RPC");
 		});
@@ -56,25 +56,29 @@ public class DiscordController : MonoBehaviour {
 	}
 
 	private void Update() {
-		_discord.RunCallbacks();
+		discord.RunCallbacks();
 	}
 
 	private void OnSceneChange(Scene current, Scene next) {
 		var activity = new Activity {
 			Details = next.name,
 			// Get random state, just for variety
-			State = _randomStates[Random.Range(0, _randomStates.Length-1)],
-			Assets = _activityAsset,
-			Timestamps = _activityTimestamp
+			State = GetRandomState(),
+			Assets = activityAsset,
+			Timestamps = activityTimestamp
 		};
 
-		_activityManager.UpdateActivity(activity, (res) => {
+		activityManager.UpdateActivity(activity, (res) => {
 			if (res == Discord.Result.Ok)
 				Debug.Log("Scene changed, RPC Updated");
 		});
 	}
 
+	private string GetRandomState() {
+		return (randomStates.Length > 0) ? randomStates[Random.Range(0, randomStates.Length - 1)] : "";
+	}
+
 	private void OnApplicationQuit() {
-		_discord.Dispose();
+		discord.Dispose();
 	}
 }

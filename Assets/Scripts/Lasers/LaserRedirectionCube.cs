@@ -1,17 +1,17 @@
 using UnityEngine;
 
 public class LaserRedirectionCube : MonoBehaviour {
-	public LayerMask layerMask;
-	public bool active = false;
-	public LaserRedirectionCube otherCube;
+	public bool Active = false;
+	[SerializeField] private LayerMask layerMask;
+	[SerializeField] private LaserRedirectionCube otherCube;
 
 	private RaycastHit hit;
 	private LineRenderer lineRenderer;
-	public GameObject laserLight;
+	[SerializeField] private GameObject laserLight;
 
-	public float dps = 15;
+	[SerializeField] private float damagePerSecond = 15;
 	private float hurtTimer = 1;
-	
+
 	void Start() {
 		lineRenderer = GetComponent<LineRenderer>();
 		if (gameObject.transform.Find("LaserLight"))
@@ -19,7 +19,7 @@ public class LaserRedirectionCube : MonoBehaviour {
 	}
 
 	void Update() {
-		if (active) {
+		if (Active) {
 			lineRenderer.positionCount = 2;
 			lineRenderer.SetPosition(0, transform.position);
 			laserLight.SetActive(true);
@@ -68,6 +68,6 @@ public class LaserRedirectionCube : MonoBehaviour {
 
 	private void SetActiveOtherCube(bool active) {
 		if (otherCube)
-			otherCube.active = active;
+			otherCube.Active = active;
 	}
 }

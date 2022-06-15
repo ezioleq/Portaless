@@ -1,14 +1,14 @@
 using UnityEngine;
 
 public class LaserOrigin : MonoBehaviour {
-	public LayerMask layerMask;
-	public bool active = true;
-	public LaserRedirectionCube otherCube;
-	
+	public bool Active = true;
+	[SerializeField] private LayerMask layerMask;
+	[SerializeField] private LaserRedirectionCube otherCube;
+
 	private RaycastHit hit;
 	private LineRenderer lineRenderer;
 
-	public float dps = 15;
+	[SerializeField] private float damagePerSecond = 15;
 	private float hurtTimer = 1;
 
 	void Start() {
@@ -16,7 +16,7 @@ public class LaserOrigin : MonoBehaviour {
 	}
 
 	void Update() {
-		if (active) {
+		if (Active) {
 			lineRenderer.positionCount = 2;
 			lineRenderer.SetPosition(0, transform.position);
 
@@ -62,6 +62,6 @@ public class LaserOrigin : MonoBehaviour {
 
 	private void SetActiveOtherCube(bool active) {
 		if (otherCube)
-			otherCube.active = active;
+			otherCube.Active = active;
 	}
 }

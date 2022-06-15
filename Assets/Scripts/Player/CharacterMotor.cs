@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class CharacterMotor : MonoBehaviour {
@@ -7,26 +6,30 @@ public class CharacterMotor : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private Vector3 playerVelocity = Vector3.zero;
 	private float moveSpeed;
-	private float gravityForce = 16;
+	[SerializeField] private float gravityForce = 16;
 	[SerializeField] private bool noclip;
-	
+
 	[Header("General")]
-	public string verticalAxis = "Vertical";
-	public string horizontalAxis = "Horizontal";
-	public float walkSpeed = 4f;
-	public float runSpeed = 6.5f;
-	public float midairSpeed = 3;
-	float maxSpeed = 0;
-	float groundSpeed = 0;
-	public float maxAirSpeed = 3;
-	public float maxWalkSpeed = 20;
-	public float maxRunSpeed = 30;
-	public float drag = 0;
-	public float jumpForce = 5;
-	float adhesionForce = 0.4f;
-	public bool lockKeyboard;
-	float groundTimer;
+	[SerializeField] private string verticalAxis = "Vertical";
+	[SerializeField] private string horizontalAxis = "Horizontal";
+	[SerializeField] private float walkSpeed = 4f;
+	[SerializeField] private float runSpeed = 6.5f;
+	[SerializeField] private float midairSpeed = 3;
+
+	private float maxSpeed = 0;
+	private float groundSpeed = 0;
+
+	[SerializeField] private float maxAirSpeed = 3;
+	[SerializeField] private float maxWalkSpeed = 20;
+	[SerializeField] private float maxRunSpeed = 30;
+	[SerializeField] private float drag = 0;
+	[SerializeField] private float jumpForce = 5;
+
+	private float adhesionForce = 0.4f;
 	private int layerMask;
+	private float groundTimer;
+
+	public bool LockKeyboard;
 
 	private void Start() {
 		cc = gameObject.GetComponent<CharacterController>();
@@ -35,9 +38,9 @@ public class CharacterMotor : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (!lockKeyboard)
+		if (!LockKeyboard)
 			Keyboard();
-		
+
 		if (!noclip)
 			cc.Move(playerVelocity * Time.deltaTime);
 
@@ -49,13 +52,13 @@ public class CharacterMotor : MonoBehaviour {
 		groundSpeed = Input.GetKey(KeyCode.LeftShift) ? maxWalkSpeed : maxRunSpeed;
 		// maxSpeed differs on the ground and in the air
 		maxSpeed = cc.isGrounded ? groundSpeed : maxAirSpeed;
-		
+
 		if (cc.isGrounded)
 			// delay ground detection to allow bhopping
 			groundTimer += Time.fixedDeltaTime;
 		else
 			groundTimer = 0;
-		
+
 		if (groundTimer > 0.08f) {
 			// on the ground use GroundAccelerate (friction)
 			if (!Input.GetMouseButton(0))
@@ -74,7 +77,7 @@ public class CharacterMotor : MonoBehaviour {
 	}
 
 	public void Keyboard() {
-		// calculate moveDirection 
+		// calculate moveDirection
 		moveDirection = (
 			Input.GetAxisRaw(horizontalAxis) * transform.right +
 			Input.GetAxisRaw(verticalAxis) * transform.forward
@@ -88,8 +91,7 @@ public class CharacterMotor : MonoBehaviour {
 					playerVelocity.y = Mathf.Clamp(playerVelocity.y, 0, Mathf.Infinity);
 					playerVelocity.y += jumpForce;
 				}
-			} 
-			
+			}
 		} else {
 			GetComponent<CharacterController>().enabled = false;
 			transform.Translate(0, 0, Input.GetAxis(verticalAxis) * moveSpeed * Time.deltaTime, Space.Self);
@@ -112,7 +114,7 @@ public class CharacterMotor : MonoBehaviour {
 		if(currentSpeed + addSpeed > maxSpeed)
 			// don't accelerate if current speed is equal or exceeds max speed
 			addSpeed = Mathf.Clamp(maxSpeed - currentSpeed, 0, maxSpeed);
-		
+
 		// return velocity + acceleration 
 		return new Vector3(currentVelocity.x, playerVelocity.y, currentVelocity.z) + addSpeed * direction;
 	}
@@ -121,7 +123,7 @@ public class CharacterMotor : MonoBehaviour {
 		currentVelocity = ApplyFriction(currentVelocity, drag); 
 		return Accelerate(currentVelocity, direction, acceleration);
 	}
-	
+
 	private Vector3 AirAccelerate(Vector3 currentVelocity, Vector3 direction, float acceleration) {
 		return Accelerate(currentVelocity, direction, acceleration);
 	}

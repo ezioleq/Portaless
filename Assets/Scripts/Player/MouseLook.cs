@@ -5,59 +5,62 @@ public class MouseLook : MonoBehaviour {
 	private Health health;
 
 	[Header("General")]
-	public string mouseYAxis = "Mouse Y";
-	public string mouseXAxis = "Mouse X";
-	public float mouseYRotation;
-	
+	[SerializeField] private string mouseYAxis = "Mouse Y";
+	[SerializeField] private string mouseXAxis = "Mouse X";
+	[SerializeField] private float mouseYRotation;
+
 	[Header("Values")]
-	[Range(1, 10)]
-	public float mouseSensitivity = 4.5f;
+	[Range(1, 10)] public float MouseSensitivity = 4.5f;
+
 	[Range(0, 90)]
-	public float maxYRotation = 90;
+	[SerializeField]
+	private float maxYRotation = 90;
+
 	[Range(-90, 0)]
-	public float minYRotation = -90;
+	[SerializeField]
+	private float minYRotation = -90;
 
 	[Header("Zoom")]
-	public float zoomingFOV = 30f;
-	public float zoomSpeed = 10f;
-	private float _defaultFOV;
-	
+	[SerializeField] private float zoomingFOV = 30f;
+	[SerializeField] private float zoomSpeed = 10f;
+	private float defaultFOV;
+
 	[Header("Locks")]
-	public bool lockMouse;
-	public bool showMouse;
-	
+	public bool LockMouse;
+	public bool ShowMouse;
+
 	private void Start() {
 		camera = Camera.main;
-		_defaultFOV = camera.fieldOfView;
+		defaultFOV = camera.fieldOfView;
 		health = GetComponent<Health>();
 	}
 
 	private void Update() {
-		if (!lockMouse && health.IsAlive())
+		if (!LockMouse && health.IsAlive())
 			Mouse();
-		
-		if (Input.GetKeyDown(KeyCode.P)) showMouse = !showMouse;
+
+		if (Input.GetKeyDown(KeyCode.P)) ShowMouse = !ShowMouse;
 
 		if (Input.GetMouseButton(2))
 			camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomingFOV, zoomSpeed * Time.deltaTime);
 		else
-			camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, _defaultFOV, zoomSpeed * Time.deltaTime);
+			camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, defaultFOV, zoomSpeed * Time.deltaTime);
 
-		if (showMouse){
+		if (ShowMouse){
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
-			lockMouse = true;
+			LockMouse = true;
 		} else {
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
-			lockMouse = false;
+			LockMouse = false;
 		}
 	}
 
 	public void Mouse() {
-		float mouseX = Input.GetAxis(mouseXAxis) * mouseSensitivity;
+		float mouseX = Input.GetAxis(mouseXAxis) * MouseSensitivity;
 
-		mouseYRotation += Input.GetAxis(mouseYAxis) * mouseSensitivity;
+		mouseYRotation += Input.GetAxis(mouseYAxis) * MouseSensitivity;
 		mouseYRotation = Mathf.Clamp(mouseYRotation, minYRotation, maxYRotation);
 
 		camera.transform.localEulerAngles = new Vector3(-mouseYRotation, 0, 0);

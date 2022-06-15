@@ -3,37 +3,43 @@ using UnityEngine;
 // Literally Garbage To Me!
 public class Grabbing : MonoBehaviour {
 	[Header("General")]
-	public Transform grabbingPoint;
-	public LayerMask layerMask;
-	public KeyCode grabKey;
-	private Transform _playerTransform;
-	
+	[SerializeField] private Transform grabbingPoint;
+	[SerializeField] private LayerMask layerMask;
+	[SerializeField] private KeyCode grabKey;
+	private Transform playerTransform;
+
 	[Header("Values")]
+
 	[Range(1, 16)]
-	public float maxDistance = 6f;
+	[SerializeField]
+	private float maxDistance = 6f;
+
 	[Range(1, 16)]
-	public float lerpSpeed;
+	[SerializeField]
+	private float lerpSpeed;
+
 	[Range(1, 16)]
+	[SerializeField]
 	public float rotationSpeed;
-	public float minLocalHeight = -0.3f;
+
+	[SerializeField] private float minLocalHeight = -0.3f;
 
 	[Header("Grabbed")]
-	[SerializeField]
-	private GameObject _grabbedObject;
-	private Rigidbody _grabbedRigidbody;
+	[SerializeField] private GameObject grabbedObject;
+	private Rigidbody grabbedRigidbody;
 
 	private GameObject fixedGrabbingPointGameObject;
 	private Vector3 localGrabbingPoint;
 
 	private void Start() {
-		_playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+		playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
 		fixedGrabbingPointGameObject = Instantiate(
 			new GameObject("FixedGrabbingPoint"),
 			grabbingPoint.position,
 			grabbingPoint.rotation
 		);
-		fixedGrabbingPointGameObject.transform.SetParent(_playerTransform);
+		fixedGrabbingPointGameObject.transform.SetParent(playerTransform);
 	}
 
 	private void Update() {
@@ -42,30 +48,30 @@ public class Grabbing : MonoBehaviour {
 
 		if (Input.GetKeyDown(grabKey)) {
 			// Dropping held object
-			if (_grabbedObject) {
-				_grabbedObject.GetComponent<Rigidbody>().useGravity = true;
+			if (grabbedObject) {
+				grabbedObject.GetComponent<Rigidbody>().useGravity = true;
 				IgnoreGrabbedObjectCollision(false);
-				_grabbedObject = null;
-				_grabbedRigidbody = null;
+				grabbedObject = null;
+				grabbedRigidbody = null;
 				return; // Ignore rest of the code
 			}
 
 			// Grabbing object
 			if (Physics.Raycast(origin.position, origin.forward, out hit, maxDistance, layerMask)) {
 				if (hit.rigidbody) {
-					_grabbedObject = hit.collider.gameObject;
-					_grabbedRigidbody = _grabbedObject.GetComponent<Rigidbody>();
-					_grabbedRigidbody.useGravity = false;
+					grabbedObject = hit.collider.gameObject;
+					grabbedRigidbody = grabbedObject.GetComponent<Rigidbody>();
+					grabbedRigidbody.useGravity = false;
 					IgnoreGrabbedObjectCollision(true);
 				}
 			}
 		}
 
-		if (_grabbedObject) {
-			localGrabbingPoint = _playerTransform.InverseTransformPoint(grabbingPoint.position);
+		if (grabbedObject) {
+			localGrabbingPoint = playerTransform.InverseTransformPoint(grabbingPoint.position);
 
-			_grabbedObject.transform.position = Vector3.Lerp(
-				_grabbedObject.transform.position,
+			grabbedObject.transform.position = Vector3.Lerp(
+				grabbedObject.transform.position,
 				new Vector3(
 					grabbingPoint.position.x,
 					(localGrabbingPoint.y >= minLocalHeight) ?
@@ -75,14 +81,14 @@ public class Grabbing : MonoBehaviour {
 				lerpSpeed * Time.deltaTime
 			);
 
-			_grabbedObject.transform.rotation = Quaternion.Lerp(
-				_grabbedObject.transform.rotation,
-				_playerTransform.rotation,
+			grabbedObject.transform.rotation = Quaternion.Lerp(
+				grabbedObject.transform.rotation,
+				playerTransform.rotation,
 				rotationSpeed * Time.deltaTime
 			);
 
-			_grabbedRigidbody.velocity = Vector3.zero;
-			_grabbedRigidbody.angularVelocity = Vector3.zero;
+			grabbedRigidbody.velocity = Vector3.zero;
+			grabbedRigidbody.angularVelocity = Vector3.zero;
 		}
 
 		Debug.DrawRay(origin.position, origin.forward * maxDistance, Color.green);
@@ -90,8 +96,8 @@ public class Grabbing : MonoBehaviour {
 
 	private void IgnoreGrabbedObjectCollision(bool ignore) {
 		Physics.IgnoreCollision(
-			_grabbedObject.GetComponent<Collider>(),
-			_playerTransform.gameObject.GetComponent<Collider>(),
+			grabbedObject.GetComponent<Collider>(),
+			playerTransform.gameObject.GetComponent<Collider>(),
 			ignore
 		);
 	}

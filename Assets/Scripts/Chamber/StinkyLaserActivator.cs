@@ -1,14 +1,14 @@
 using UnityEngine;
 
 public class StinkyLaserActivator : MonoBehaviour {
-    public LaserRedirectionCube stinkyCube;
-    private Doors _doors; 
+    [SerializeField] private LaserRedirectionCube stinkyCube;
+    private Doors doors; 
 
     void Start() {
-        _doors = GetComponent<Doors>();
+        doors = GetComponent<Doors>();
     }
 
     void Update() {
-        _doors.ChangeState(stinkyCube.active);
+        doors.ChangeState(stinkyCube.Active);
     }
 }

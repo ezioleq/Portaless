@@ -3,37 +3,37 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour {
-	public int maxHealth = 100;
-	public int regenRate = 5;
-	public float minTimeAfterHit = 5;
-	public KeyCode emergencySuicideKey = KeyCode.R;
-	public float timeToRespawn = 2f;
+	public int MaxHealth { get; private set; } = 100;
 
-	[SerializeField]
-	private float health;
+	[SerializeField] private float health;
 	private bool isAlive = true;
+
+	[SerializeField] private int regenRate = 5;
+	[SerializeField] private float minTimeAfterHit = 5;
+	[SerializeField] private KeyCode emergencySuicideKey = KeyCode.R;
+	[SerializeField] private float timeToRespawn = 2f;
+
 	private GameObject cameraObject;
-	[SerializeField]
-	private Image hurtSprite;
+	[SerializeField] private Image hurtSprite;
 
 	private float regenTimer;
 	private float respawnTimer;
 	private float lastHitTimer;
-	
+
 	private Transform playerTransform;
 
 	private void Start() {
-		health = maxHealth;
+		health = MaxHealth;
 		cameraObject = Camera.main.gameObject;
 	}
 
 	private void Update() {
-		if (GetHealth() > maxHealth)
-			health = maxHealth;
+		if (GetHealth() > MaxHealth)
+			health = MaxHealth;
 		else if (GetHealth() <= 0)
 			Kill();
 
-		if (GetHealth() < maxHealth)
+		if (GetHealth() < MaxHealth)
 			lastHitTimer += Time.deltaTime;
 
 		if (Input.GetKeyDown(emergencySuicideKey))
@@ -41,14 +41,14 @@ public class Health : MonoBehaviour {
 
 		if (!isAlive) {
 			respawnTimer += Time.deltaTime;
-			
+
 			if (respawnTimer >= timeToRespawn && Input.anyKey)
 				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
 
-		hurtSprite.color = new Color(1, 1, 1, 1-(health/maxHealth));
+		hurtSprite.color = new Color(1f, 1f, 1f, 1f - (health / MaxHealth));
 
-		if (isAlive && lastHitTimer >= minTimeAfterHit && health < maxHealth) {
+		if (isAlive && lastHitTimer >= minTimeAfterHit && health < MaxHealth) {
 			regenTimer += Time.deltaTime;
 
 			if (regenTimer >= 1) {
@@ -62,7 +62,8 @@ public class Health : MonoBehaviour {
 	public bool IsAlive() => isAlive;
 
 	public void Hurt(float amount) {
-		if (isAlive) {// You can't hurt me if I'm already dead...
+		// You can't hurt me if I'm already dead...
+		if (isAlive) {
 			health -= amount;
 			lastHitTimer = 0;
 		}
@@ -71,6 +72,7 @@ public class Health : MonoBehaviour {
 	public void Kill() {
 		if (!isAlive)
 			return;
+
 		isAlive = false;
 		health = 0;
 

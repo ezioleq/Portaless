@@ -1,24 +1,16 @@
 using UnityEngine;
 
 public class Dropper : MonoBehaviour {
-	public GameObject objectToDrop;
-	public GameObject droppedObject;
-	public Transform dropPoint;
-	private bool _alreadyDropped;
-	
-	void Start() {
-		
-	}
-
-	void Update() {
-
-	}
+	[SerializeField] private GameObject objectToDrop;
+	[SerializeField] private GameObject droppedObject;
+	[SerializeField] private Transform dropPoint;
+	private bool alreadyDropped;
 
 	public void DropCube() {
-		if (droppedObject != null && _alreadyDropped)
+		if (droppedObject != null && alreadyDropped)
 			Destroy(droppedObject);
 
 		droppedObject = Instantiate(objectToDrop, dropPoint.position, dropPoint.rotation);
-		_alreadyDropped = true;
+		alreadyDropped = true;
 	}
 }

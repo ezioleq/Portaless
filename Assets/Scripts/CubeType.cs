@@ -2,9 +2,9 @@ using UnityEngine;
 
 public enum CubeTypes {
 	Normal,
-	Reflective
+	Reflective,
 }
 
 public class CubeType : MonoBehaviour {
-	public CubeTypes type;
+	public CubeTypes Type;
 }
