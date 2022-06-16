@@ -142,12 +142,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fa9666b231bffacbc8499b3abd080e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Active: 1
+  isReflective: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 9
-  active: 1
   otherCube: {fileID: 0}
-  dps: 10
+  damagePerSecond: 15
 --- !u!1 &2723157693406827963
 GameObject:
   m_ObjectHideFlags: 0

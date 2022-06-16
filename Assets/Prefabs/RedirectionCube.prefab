@@ -721,7 +721,7 @@ GameObject:
   - component: {fileID: 6635007541174422856}
   - component: {fileID: 6635007541174422857}
   - component: {fileID: 42394884}
-  - component: {fileID: 702125438}
+  - component: {fileID: -5623453563217208910}
   - component: {fileID: 1194371067953788204}
   m_Layer: 0
   m_Name: RedirectionCube
@@ -880,7 +880,7 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &702125438
+--- !u!114 &-5623453563217208910
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -889,15 +889,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5824598962949091350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a45e48eb7bf7b8ce8206b68f8c77f7a, type: 3}
+  m_Script: {fileID: 11500000, guid: a6fa9666b231bffacbc8499b3abd080e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Active: 0
+  isReceiver: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 9
   otherCube: {fileID: 0}
-  laserLight: {fileID: 0}
   damagePerSecond: 15
 --- !u!114 &1194371067953788204
 MonoBehaviour:

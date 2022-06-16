@@ -1,18 +1,24 @@
 using UnityEngine;
 
 public class LaserOrigin : MonoBehaviour {
-	public bool Active = true;
+	public bool Active = false;
+	[SerializeField] private bool isReceiver = false;
 	[SerializeField] private LayerMask layerMask;
-	[SerializeField] private LaserRedirectionCube otherCube;
+	[SerializeField] private LaserOrigin otherCube;
 
 	private RaycastHit hit;
 	private LineRenderer lineRenderer;
+	private GameObject laserLight;
 
 	[SerializeField] private float damagePerSecond = 15;
 	private float hurtTimer = 1;
 
 	void Start() {
 		lineRenderer = GetComponent<LineRenderer>();
+		if (isReceiver) {
+			if (gameObject.transform.Find("LaserLight"))
+				laserLight = gameObject.transform.Find("LaserLight").gameObject;
+		}
 	}
 
 	void Update() {
@@ -20,12 +26,15 @@ public class LaserOrigin : MonoBehaviour {
 			lineRenderer.positionCount = 2;
 			lineRenderer.SetPosition(0, transform.position);
 
+			if (isReceiver)
+				laserLight.SetActive(true);
+
 			if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, layerMask)) {
 				lineRenderer.SetPosition(1, hit.point);
 
 				if (hit.collider.gameObject.CompareTag("Redirect")) {
 					SetActiveOtherCube(false);
-					otherCube = hit.collider.gameObject.GetComponent<LaserRedirectionCube>();
+					otherCube = hit.collider.gameObject.GetComponent<LaserOrigin>();
 				} else {
 					SetActiveOtherCube(false);
 					otherCube = null;
@@ -50,12 +59,17 @@ public class LaserOrigin : MonoBehaviour {
 				SetActiveOtherCube(true);
 
 			} else {
-				lineRenderer.SetPosition(1, transform.forward * 100f);
+				lineRenderer.SetPosition(1, transform.forward * 1000f);
 				SetActiveOtherCube(false);
 				otherCube = null;
 			}
 		} else {
 			lineRenderer.positionCount = 0;
+			if (isReceiver) {
+				SetActiveOtherCube(false);
+				if (laserLight)
+					laserLight.SetActive(false);
+			}
 			otherCube = null;
 		}
 	}
