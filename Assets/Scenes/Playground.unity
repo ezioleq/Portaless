@@ -678,13 +678,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a45e48eb7bf7b8ce8206b68f8c77f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Active: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
-  active: 0
   otherCube: {fileID: 0}
   laserLight: {fileID: 109380665}
-  dps: 15
+  damagePerSecond: 15
 --- !u!65 &440145506
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2851,6 +2851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activated: 0
   animationSpeed: 5
+  offset: {x: 0, y: -0.12, z: 0}
   onEnter:
     m_PersistentCalls:
       m_Calls:
@@ -3203,9 +3204,8 @@ MonoBehaviour:
   animationSpeed: 14
   timeToHide: 2
   flySpeed: 20
-  _launched: 0
-  _player: {fileID: 0}
-  hitPoint: {fileID: 922222242}
+  launched: 0
+  player: {fileID: 0}
 --- !u!4 &3018731287005278770 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3018731287659186233, guid: 27844d5712a59b6ee8e1cafbc0ae2c7d, type: 3}
@@ -3423,32 +3423,8 @@ PrefabInstance:
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
-      propertyPath: drag
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: maxSpeed
       value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
-      propertyPath: runSpeed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
-      propertyPath: walkSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
-      propertyPath: maxRunSpeed
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
-      propertyPath: midairSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
-      propertyPath: maxWalkSpeed
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4930947828918908567, guid: e25180c3d83bbe2f481063e3c76e18d8, type: 3}
       propertyPath: maxGroundSpeed
