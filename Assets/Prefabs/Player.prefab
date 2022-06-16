@@ -66,18 +66,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17646f5b2da6ade9584afea3684485b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gravityForce: 16
   noclip: 0
   verticalAxis: Vertical
   horizontalAxis: Horizontal
-  walkSpeed: 6
-  runSpeed: 8
-  midairSpeed: 5
+  walkSpeed: 45
+  runSpeed: 65
+  midairSpeed: 15
   maxAirSpeed: 3
-  maxWalkSpeed: 20
-  maxRunSpeed: 30
-  drag: 0
+  maxWalkSpeed: 10
+  maxRunSpeed: 14
+  drag: 0.2
   jumpForce: 6
-  lockKeyboard: 0
+  LockKeyboard: 0
 --- !u!114 &4930947828918908564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +122,7 @@ MonoBehaviour:
   lerpSpeed: 10
   rotationSpeed: 10
   minLocalHeight: -0.4
-  _grabbedObject: {fileID: 0}
+  grabbedObject: {fileID: 0}
 --- !u!114 &4930947828918908561
 MonoBehaviour:
   m_ObjectHideFlags: 0
