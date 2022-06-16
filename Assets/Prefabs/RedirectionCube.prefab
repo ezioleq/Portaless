@@ -898,7 +898,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9
   otherCube: {fileID: 0}
-  damagePerSecond: 15
+  damagePerSecond: 50
+  hurtRate: 0.2
 --- !u!114 &1194371067953788204
 MonoBehaviour:
   m_ObjectHideFlags: 0

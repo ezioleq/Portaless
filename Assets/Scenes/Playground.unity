@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 109380668}
   - component: {fileID: 109380667}
   m_Layer: 0
-  m_Name: LaserLight (1)
+  m_Name: LaserLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,6 +685,7 @@ MonoBehaviour:
     m_Bits: 0
   otherCube: {fileID: 0}
   damagePerSecond: 15
+  hurtRate: 0.2
 --- !u!65 &440145506
 BoxCollider:
   m_ObjectHideFlags: 0

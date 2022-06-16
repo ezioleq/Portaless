@@ -143,12 +143,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Active: 1
-  isReflective: 0
+  isReceiver: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 9
   otherCube: {fileID: 0}
-  damagePerSecond: 15
+  damagePerSecond: 50
+  hurtRate: 0.2
 --- !u!1 &2723157693406827963
 GameObject:
   m_ObjectHideFlags: 0

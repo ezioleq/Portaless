@@ -10,8 +10,9 @@ public class LaserOrigin : MonoBehaviour {
 	private LineRenderer lineRenderer;
 	private GameObject laserLight;
 
-	[SerializeField] private float damagePerSecond = 15;
-	private float hurtTimer = 1;
+	[SerializeField] private float damagePerSecond = 50;
+	[SerializeField] private float hurtRate = 0.3f;
+	private float hurtTimer = 0;
 
 	void Start() {
 		lineRenderer = GetComponent<LineRenderer>();
@@ -43,8 +44,8 @@ public class LaserOrigin : MonoBehaviour {
 				if (hit.collider.CompareTag("Player")) {
 					hurtTimer += Time.deltaTime;
 
-					if (hurtTimer >= 0.3) {
-						hit.collider.GetComponent<Health>().Hurt(10);
+					if (hurtTimer >= hurtRate) {
+						hit.collider.GetComponent<Health>().Hurt(damagePerSecond * hurtRate);
 						hit.collider.GetComponent<CharacterController>().Move(
 							new Vector3(
 								Random.Range(-0.2f, 0.2f),
