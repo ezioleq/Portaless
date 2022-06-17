@@ -19,7 +19,7 @@ and we are here now.
 I'd like to treat it like a prototype, sandbox, something where we can experiment with new entities,
 learn code, project scaling and maintenance. 
 
-Please use `Unity 2020.3.26f1` for best compatibility.
+Please use `Unity 2020.3.XX LTS` for best compatibility.
 
 See [Portal 2 on Steam](https://store.steampowered.com/app/620/Portal_2/)
 
@@ -32,7 +32,7 @@ and then extract it.
 
 2. Open Unity Hub and add existing project or just open project in running Unity.
 
-3. Enjoy
+3. Enjoy!
 
 ## Screenshot
 
