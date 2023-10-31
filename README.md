@@ -34,7 +34,7 @@ and then extract it.
 2. Open Unity Hub and add existing project or just open project in running Unity.  
 Please use `Unity 2022.3.11f1 LTS` for best compatibility.
 
-4. Enjoy!
+3. Enjoy!
 
 ## Screenshot
 
