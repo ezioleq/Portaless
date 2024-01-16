@@ -3,7 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/Ezioleq/Portaless)
 ![GitHub issues](https://img.shields.io/github/issues/Ezioleq/Portaless)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Ezioleq/Portaless)
-![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Ezioleq/Portaless/1)
+![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Ezioleq/Portaless/2)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Ezioleq/Portaless)
 ![GitHub forks](https://img.shields.io/github/forks/Ezioleq/Portaless)
 
