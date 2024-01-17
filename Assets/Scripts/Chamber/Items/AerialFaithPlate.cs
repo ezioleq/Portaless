@@ -57,10 +57,10 @@ namespace Chamber.Items
 
             deployed = true;
 
-            StartCoroutine(RetractTimeout());
+            StartCoroutine(RetreatTimeout());
         }
 
-        private IEnumerator RetractTimeout()
+        private IEnumerator RetreatTimeout()
         {
             yield return new WaitForSeconds(cooldown);
             deployed = false;
