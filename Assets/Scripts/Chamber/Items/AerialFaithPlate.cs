@@ -9,7 +9,8 @@ namespace Chamber.Items
 
         [Header("Visuals")]
         [SerializeField] private float maxPlateRotation = 60f;
-        [SerializeField] private float animationSpeed = 20f;
+        [SerializeField] private float openAnimationDuration = 0.1f;
+        [SerializeField] private float closeAnimationDuration = 0.25f;
 
         [Header("Settings")]
         [SerializeField] private float force = 20f;
@@ -21,18 +22,6 @@ namespace Chamber.Items
         private void Start()
         {
             transform = gameObject.transform;
-        }
-
-        private void Update()
-        {
-            // TODO: Avoid animation in update this way.
-            plate.localRotation = Quaternion.Slerp(
-                plate.localRotation,
-                Quaternion.Euler(
-                    (deployed) ? new Vector3(maxPlateRotation, 0, 0) : Vector3.zero
-                ),
-                animationSpeed * Time.deltaTime
-            );
         }
 
         private void LaunchColliderObject(Collider other)
@@ -57,13 +46,36 @@ namespace Chamber.Items
 
             deployed = true;
 
+            StartCoroutine(StartPlateRotationAnimation(maxPlateRotation, openAnimationDuration));
             StartCoroutine(RetreatTimeout());
         }
 
         private IEnumerator RetreatTimeout()
         {
             yield return new WaitForSeconds(cooldown);
+            StartCoroutine(StartPlateRotationAnimation(0, closeAnimationDuration));
             deployed = false;
+        }
+
+        private IEnumerator StartPlateRotationAnimation(float targetRotation, float duration)
+        {
+            var startRotation = plate.localRotation;
+            var endRotation  = Quaternion.Euler(targetRotation, 0, 0);
+            float time = 0;
+
+            while (time < duration)
+            {
+                plate.localRotation = Quaternion.Slerp(
+                    startRotation,
+                    endRotation,
+                    time / duration
+                );
+
+                time += Time.deltaTime;
+                yield return null;
+            }
+
+            plate.localRotation = endRotation;
         }
 
         private void OnTriggerEnter(Collider other)
