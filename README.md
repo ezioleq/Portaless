@@ -27,7 +27,7 @@ See [Portal 2 on Steam](https://store.steampowered.com/app/620/Portal_2/)
 ## How to
 To run this project you just need to:
 
-1. Clone this repository using `git clone https://github.com/Ezioleq/Portaless.git --depth=1`  
+1. Clone this repository using `git clone https://github.com/ezioleq/Portaless.git --depth=1`  
 or download it using this [link](https://github.com/ezioleq/Portaless/archive/refs/heads/master.zip)
 and then extract it.
 
