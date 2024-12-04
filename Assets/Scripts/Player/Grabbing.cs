@@ -87,7 +87,7 @@ public class Grabbing : MonoBehaviour {
 				rotationSpeed * Time.deltaTime
 			);
 
-			grabbedRigidbody.velocity = Vector3.zero;
+			grabbedRigidbody.linearVelocity = Vector3.zero;
 			grabbedRigidbody.angularVelocity = Vector3.zero;
 		}
 

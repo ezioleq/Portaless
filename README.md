@@ -32,7 +32,7 @@ or download it using this [link](https://github.com/ezioleq/Portaless/archive/re
 and then extract it.
 
 2. Open Unity Hub and add existing project or just open project in running Unity.  
-Please use `Unity 2022.3.11f1 LTS` for best compatibility.
+Please use `Unity 6 (6000.0.X LTS)` for best compatibility.
 
 3. Enjoy!
 
