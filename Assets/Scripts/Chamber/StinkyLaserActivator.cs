@@ -1,14 +1,18 @@
+using Portaless.Lasers;
 using UnityEngine;
 
-public class StinkyLaserActivator : MonoBehaviour {
-    [SerializeField] private LaserOrigin stinkyCube;
-    private Doors doors;
+namespace Portaless.Chamber
+{
+    public class StinkyLaserActivator : MonoBehaviour {
+        [SerializeField] private LaserOrigin stinkyCube;
+        private Doors doors;
 
-    void Start() {
-        doors = GetComponent<Doors>();
-    }
+        void Start() {
+            doors = GetComponent<Doors>();
+        }
 
-    void Update() {
-        doors.ChangeState(stinkyCube.Active);
+        void Update() {
+            doors.ChangeState(stinkyCube.Active);
+        }
     }
 }

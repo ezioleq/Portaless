@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public enum CubeTypes {
-	Normal,
-	Reflective,
-}
+namespace Portaless
+{
+	public enum CubeTypes {
+		Normal,
+		Reflective,
+	}
 
-public class CubeType : MonoBehaviour {
-	public CubeTypes Type;
+	public class CubeType : MonoBehaviour {
+		public CubeTypes Type;
+	}
 }
