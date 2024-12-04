@@ -1,7 +1,8 @@
 using System.Collections;
+using Portaless.Player;
 using UnityEngine;
 
-namespace Chamber.Items
+namespace Portaless.Chamber.Items
 {
     public class AerialFaithPlate : MonoBehaviour
     {
