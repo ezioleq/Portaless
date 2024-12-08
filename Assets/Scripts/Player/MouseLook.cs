@@ -1,72 +1,65 @@
-﻿using UnityEngine;
+﻿using Portaless.Input;
+using UnityEngine;
 
 namespace Portaless.Player
 {
-	public class MouseLook : MonoBehaviour {
-		private new Camera camera;
-		private Health health;
+    public class MouseLook : MonoBehaviour
+    {
+        [Header("Config")]
+        [Range(0.1f, 2)] public float mouseSensitivity = 0.4f;
+        [Range(0, 90)] [SerializeField] private float maxYRotation = 90;
+        [Range(-90, 0)] [SerializeField] private float minYRotation = -90;
 
-		[Header("General")]
-		[SerializeField] private string mouseYAxis = "Mouse Y";
-		[SerializeField] private string mouseXAxis = "Mouse X";
-		[SerializeField] private float mouseYRotation;
+        [Header("Zoom settings")]
+        [SerializeField] private float zoomingFOV = 30f;
+        [SerializeField] private float zoomSpeed = 10f;
 
-		[Header("Values")]
-		[Range(1, 10)] public float mouseSensitivity = 4.5f;
+        [Header("Locks")]
+        public bool lockMouse;
+        public bool showMouse;
 
-		[Range(0, 90)]
-		[SerializeField]
-		private float maxYRotation = 90;
+        private new Camera camera;
+        private Health health;
+        private float defaultFOV;
+        private float mouseYRotation;
 
-		[Range(-90, 0)]
-		[SerializeField]
-		private float minYRotation = -90;
+        private void Start()
+        {
+            camera = Camera.main;
+            defaultFOV = camera?.fieldOfView ?? 60;
+            health = GetComponent<Health>();
+        }
 
-		[Header("Zoom")]
-		[SerializeField] private float zoomingFOV = 30f;
-		[SerializeField] private float zoomSpeed = 10f;
-		private float defaultFOV;
+        private void Update()
+        {
+            if (!lockMouse && health.IsAlive())
+                Mouse();
 
-		[Header("Locks")]
-		public bool lockMouse;
-		public bool showMouse;
+            camera.fieldOfView = Mathf.Lerp(
+                camera.fieldOfView, InputManager.Instance.Actions.Gameplay.Zoom.IsPressed() ? zoomingFOV : defaultFOV,
+                zoomSpeed * Time.deltaTime
+            );
 
-		private void Start() {
-			camera = Camera.main;
-			defaultFOV = camera.fieldOfView;
-			health = GetComponent<Health>();
-		}
+            ToggleCursorVisibility(showMouse);
+        }
 
-		private void Update() {
-			if (!lockMouse && health.IsAlive())
-				Mouse();
+        private void Mouse()
+        {
+            var input = InputManager.Instance.Actions.Gameplay.Look.ReadValue<Vector2>();
+            float mouseX = input.x * mouseSensitivity;
 
-			if (Input.GetKeyDown(KeyCode.P)) showMouse = !showMouse;
+            mouseYRotation += input.y * mouseSensitivity;
+            mouseYRotation = Mathf.Clamp(mouseYRotation, minYRotation, maxYRotation);
 
-			if (Input.GetMouseButton(2))
-				camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoomingFOV, zoomSpeed * Time.deltaTime);
-			else
-				camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, defaultFOV, zoomSpeed * Time.deltaTime);
+            camera.transform.localEulerAngles = new Vector3(-mouseYRotation, 0, 0);
+            transform.Rotate(0, mouseX, 0);
+        }
 
-			if (showMouse){
-				Cursor.visible = true;
-				Cursor.lockState = CursorLockMode.None;
-				lockMouse = true;
-			} else {
-				Cursor.visible = false;
-				Cursor.lockState = CursorLockMode.Locked;
-				lockMouse = false;
-			}
-		}
-
-		private void Mouse() {
-			float mouseX = Input.GetAxis(mouseXAxis) * mouseSensitivity;
-
-			mouseYRotation += Input.GetAxis(mouseYAxis) * mouseSensitivity;
-			mouseYRotation = Mathf.Clamp(mouseYRotation, minYRotation, maxYRotation);
-
-			camera.transform.localEulerAngles = new Vector3(-mouseYRotation, 0, 0);
-			transform.Rotate(0, mouseX, 0);
-		}
-	}
+        private void ToggleCursorVisibility(bool visible)
+        {
+            Cursor.visible = visible;
+            Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
+            lockMouse = visible;
+        }
+    }
 }
