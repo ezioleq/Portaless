@@ -1,3 +1,4 @@
+using Portaless.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,7 +13,6 @@ namespace Portaless.Player
 
 		[SerializeField] private int regenRate = 5;
 		[SerializeField] private float minTimeAfterHit = 5;
-		[SerializeField] private KeyCode emergencySuicideKey = KeyCode.R;
 		[SerializeField] private float timeToRespawn = 2f;
 
 		private GameObject cameraObject;
@@ -27,6 +27,7 @@ namespace Portaless.Player
 		private void Start() {
 			health = MaxHealth;
 			cameraObject = Camera.main.gameObject;
+			InputManager.Instance.Actions.Gameplay.Respawn.performed += _ => Kill();
 		}
 
 		private void Update() {
@@ -38,13 +39,10 @@ namespace Portaless.Player
 			if (GetHealth() < MaxHealth)
 				lastHitTimer += Time.deltaTime;
 
-			if (Input.GetKeyDown(emergencySuicideKey))
-				Kill();
-
 			if (!isAlive) {
 				respawnTimer += Time.deltaTime;
 
-				if (respawnTimer >= timeToRespawn && Input.anyKey)
+				if (respawnTimer >= timeToRespawn && InputManager.Instance.Actions.Gameplay.Jump.triggered)
 					SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 			}
 

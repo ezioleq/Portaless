@@ -1,4 +1,5 @@
 using System;
+using Portaless.Input;
 using TMPro;
 using UnityEngine;
 
@@ -10,8 +11,7 @@ namespace Portaless.UI
 		private float fpsCounter;
 		private float timer;
 
-		[SerializeField] private KeyCode toggleKey = KeyCode.F3;
-		private string showFpsStateKey = "show_fps";
+		private const string ShowFpsStateKey = "show_fps";
 
 		private void Awake() {
 			// Allow only one instance by destroying another ones
@@ -20,12 +20,15 @@ namespace Portaless.UI
 				Destroy(this.gameObject);
 
 			LoadState();
+
+		}
+
+		private void Start()
+		{
+			InputManager.Instance.Actions.Gameplay.TogglePerformanceOverlay.performed += _ => ToggleFPS();
 		}
 
 		private void Update() {
-			if (Input.GetKeyDown(toggleKey))
-				ToggleFPS();
-
 			if (Time.time > timer) {
 				fpsCounter = (int)(1f / Time.unscaledDeltaTime);
 				fpsCounterText.text = fpsCounter + " FPS";
@@ -40,14 +43,14 @@ namespace Portaless.UI
 
 		private void SaveState() {
 			PlayerPrefs.SetInt(
-				showFpsStateKey,
+				ShowFpsStateKey,
 				Convert.ToInt32(!fpsCounterText.gameObject.activeSelf)
 			);
 		}
 
 		private void LoadState() {
 			fpsCounterText.gameObject.SetActive(
-				Convert.ToBoolean(PlayerPrefs.GetInt(showFpsStateKey, 0))
+				Convert.ToBoolean(PlayerPrefs.GetInt(ShowFpsStateKey, 0))
 			);
 		}
 	}

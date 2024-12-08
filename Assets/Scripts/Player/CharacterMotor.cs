@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Portaless.Input;
+using UnityEngine;
 
 namespace Portaless.Player
 {
@@ -12,8 +13,6 @@ namespace Portaless.Player
 		[SerializeField] private bool noclip;
 
 		[Header("General")]
-		[SerializeField] private string verticalAxis = "Vertical";
-		[SerializeField] private string horizontalAxis = "Horizontal";
 		[SerializeField] private float walkSpeed = 4f;
 		[SerializeField] private float runSpeed = 6.5f;
 		[SerializeField] private float midairSpeed = 3;
@@ -31,27 +30,26 @@ namespace Portaless.Player
 		private int layerMask;
 		private float groundTimer;
 
-		public bool LockKeyboard;
+		public bool lockKeyboard;
 
 		private void Start() {
 			cc = gameObject.GetComponent<CharacterController>();
 			layerMask = LayerMask.GetMask("Player");
 			layerMask = ~layerMask;
+
+			InputManager.Instance.Actions.Gameplay.Noclip.performed += _ => noclip = !noclip;
 		}
 
 		private void Update() {
-			if (!LockKeyboard)
+			if (!lockKeyboard)
 				Keyboard();
 
 			if (!noclip)
 				cc.Move(playerVelocity * Time.deltaTime);
-
-			if (Input.GetKeyDown(KeyCode.V))
-				noclip = !noclip;
 		}
 
 		private void FixedUpdate() {
-			groundSpeed = Input.GetKey(KeyCode.LeftShift) ? maxWalkSpeed : maxRunSpeed;
+			groundSpeed = InputManager.Instance.Actions.Gameplay.Sprint.IsPressed() ? maxWalkSpeed : maxRunSpeed;
 			// maxSpeed differs on the ground and in the air
 			maxSpeed = cc.isGrounded ? groundSpeed : maxAirSpeed;
 
@@ -62,14 +60,15 @@ namespace Portaless.Player
 				groundTimer = 0;
 
 			if (groundTimer > 0.08f) {
+				// TODO: Figure what to do with this mouse button based physics
 				// on the ground use GroundAccelerate (friction)
-				if (!Input.GetMouseButton(0))
+				// if (!Input.GetMouseButton(0))
 					playerVelocity = GroundAccelerate(playerVelocity, moveDirection, moveSpeed);
 
-				if (Input.GetMouseButton(0)) {
-					playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed);
-					playerVelocity.y -= gravityForce * Time.deltaTime;
-				}
+				// if (Input.GetMouseButton(0)) {
+				// 	playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed);
+				// 	playerVelocity.y -= gravityForce * Time.deltaTime;
+				// }
 			} else {
 				// in the air use AirAccelerate (no friction)
 				playerVelocity = AirAccelerate(playerVelocity, moveDirection, midairSpeed);
@@ -80,29 +79,31 @@ namespace Portaless.Player
 
 		public void Keyboard() {
 			// calculate moveDirection
+			var inputDirection = InputManager.Instance.Actions.Gameplay.Move.ReadValue<Vector2>();
 			moveDirection = (
-				Input.GetAxisRaw(horizontalAxis) * transform.right +
-				Input.GetAxisRaw(verticalAxis) * transform.forward
+				inputDirection.x * transform.right +
+				inputDirection.y * transform.forward
 			).normalized;
-			moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+			moveSpeed = InputManager.Instance.Actions.Gameplay.Sprint.IsPressed() ? runSpeed : walkSpeed;
 
 			if (!noclip) {
 				GetComponent<CharacterController>().enabled = true;
 				if (cc.isGrounded) {
-					if (Input.GetButton("Jump")) {
+					if (InputManager.Instance.Actions.Gameplay.Jump.IsPressed()) {
 						playerVelocity.y = Mathf.Clamp(playerVelocity.y, 0, Mathf.Infinity);
 						playerVelocity.y += jumpForce;
 					}
 				}
 			} else {
 				GetComponent<CharacterController>().enabled = false;
-				transform.Translate(0, 0, Input.GetAxis(verticalAxis) * moveSpeed * Time.deltaTime, Space.Self);
-				transform.Translate(Input.GetAxis(horizontalAxis) * moveSpeed * Time.deltaTime, 0, 0, Space.Self);
+				inputDirection = InputManager.Instance.Actions.Gameplay.Move.ReadValue<Vector2>(); // it's bad
+				transform.Translate(0, 0, inputDirection.y * moveSpeed * Time.deltaTime, Space.Self);
+				transform.Translate(inputDirection.x * moveSpeed * Time.deltaTime, 0, 0, Space.Self);
 
-				if (Input.GetButton("Jump"))
+				if (InputManager.Instance.Actions.Gameplay.Jump.IsPressed())
 					transform.Translate(0, moveSpeed * Time.deltaTime, 0, Space.World);
 
-				if (Input.GetKey(KeyCode.LeftControl))
+				if (InputManager.Instance.Actions.Gameplay.Crouch.IsPressed())
 					transform.Translate(0, -moveSpeed * Time.deltaTime, 0, Space.World);
 			}
 		}
@@ -135,14 +136,13 @@ namespace Portaless.Player
 		}
 
 		private void OnControllerColliderHit(ControllerColliderHit collision) {
-			RaycastHit stepCast;
 			float stepCastDepth = 0.1f;
 
 			// check if player is able to step
 			if (!Physics.Raycast(
 				    transform.position - (cc.height/2) * transform.up + cc.stepOffset * transform.up,
 				    new Vector3(playerVelocity.x, 0, playerVelocity.z).normalized,
-				    out stepCast,
+				    out _,
 				    cc.radius/2+stepCastDepth,
 				    layerMask,
 				    QueryTriggerInteraction.Ignore))

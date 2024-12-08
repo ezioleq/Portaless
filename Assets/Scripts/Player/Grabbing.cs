@@ -1,3 +1,4 @@
+using Portaless.Input;
 using UnityEngine;
 
 namespace Portaless.Player
@@ -7,7 +8,6 @@ namespace Portaless.Player
 		[Header("General")]
 		[SerializeField] private Transform grabbingPoint;
 		[SerializeField] private LayerMask layerMask;
-		[SerializeField] private KeyCode grabKey;
 		private Transform playerTransform;
 
 		[Header("Values")]
@@ -45,10 +45,9 @@ namespace Portaless.Player
 		}
 
 		private void Update() {
-			RaycastHit hit;
 			Transform origin = Camera.main.transform;
 
-			if (Input.GetKeyDown(grabKey)) {
+			if (InputManager.Instance.Actions.Gameplay.Use.triggered) {
 				// Dropping held object
 				if (grabbedObject) {
 					grabbedObject.GetComponent<Rigidbody>().useGravity = true;
@@ -59,7 +58,7 @@ namespace Portaless.Player
 				}
 
 				// Grabbing object
-				if (Physics.Raycast(origin.position, origin.forward, out hit, maxDistance, layerMask)) {
+				if (Physics.Raycast(origin.position, origin.forward, out var hit, maxDistance, layerMask)) {
 					if (hit.rigidbody) {
 						grabbedObject = hit.collider.gameObject;
 						grabbedRigidbody = grabbedObject.GetComponent<Rigidbody>();
